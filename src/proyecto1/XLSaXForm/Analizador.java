@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -95,20 +97,20 @@ public class Analizador {
                             break;
 
                         case Cell.CELL_TYPE_BOOLEAN:
-                            if(celda.getBooleanCellValue() == true){
+                            if (celda.getBooleanCellValue() == true) {
                                 aux_list.add("true");
-                            
-                            }else{
+
+                            } else {
                                 aux_list.add("false");
                             }
-                            
+
                             contadorCol++;
 
                             contadorCol++;
                             break;
                         default:
                             // System.out.println("false");
-                            aux_list.add("false");
+                            aux_list.add("Viene-Vacio");
                             contadorCol++;
 
                     }
@@ -116,10 +118,10 @@ public class Analizador {
                 }
 
             }
-          if(contadorFila>0){
-                  añadir(Encabezado,aux_list);
-          aux_list.clear();
-          }
+            if (contadorFila > 0) {
+                añadir(Encabezado, aux_list);
+                aux_list.clear();
+            }
             contadorFila++;
         }
 
@@ -128,48 +130,81 @@ public class Analizador {
         for (int i = 0; i < Encabezado.size(); i++) {
             System.out.println(Encabezado.get(i));
         }
-        System.out.println(buffer);
+        CrearFile(buffer.toString());
     }
 
     void añadir(ArrayList<String> Encabezado, ArrayList<String> aux_List) {
 
         for (int i = 0; i < Encabezado.size(); i++) {
             if (Encabezado.get(i).equalsIgnoreCase("Tipo")) {
-                buffer.append(aux_List.get(i) + "{");
+                buffer.append(aux_List.get(i) + "{ \n");
             } else if (Encabezado.get(i).equalsIgnoreCase("idpregunta")) {
-                buffer.append("idpregunta=" + aux_List.get(i) + ";");
+                buffer.append("idpregunta=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("etiqueta")) {
-                buffer.append("etiqueta=" + aux_List.get(i) + ";");
+                buffer.append("etiqueta=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("parametro")) {
-                buffer.append("parametro=" + aux_List.get(i) + ";");
+                buffer.append("parametro=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("calcular")) {
-                buffer.append("calcular=" + aux_List.get(i) + ";");
-            } else if (Encabezado.get(i).equalsIgnoreCase("aplicable")) {
-                buffer.append("aplicable=" + aux_List.get(i) + ";");
+                buffer.append("calcular=" + aux_List.get(i) + ";\n");
+            } else if (Encabezado.get(i).equalsIgnoreCase("aplicable ")) {
+                buffer.append("aplicable=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("sugerencia")) {
-                buffer.append("sugerencia=" + aux_List.get(i) + ";");
+                buffer.append("sugerencia=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("restringir")) {
-                buffer.append("restringir=" + aux_List.get(i) + ";");
+                buffer.append("restringir=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("restringirmsn")) {
-                buffer.append("restringirmsn=" + aux_List.get(i) + ";");
+                buffer.append("restringirmsn=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("requerido")) {
-                buffer.append("requerido=" + aux_List.get(i) + ";");
+                buffer.append("requerido=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("pordefecto")) {
-                buffer.append("pordefecto=" + aux_List.get(i) + ";");
+                buffer.append("pordefecto=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("lectura")) {
-                buffer.append("lectura=" + aux_List.get(i) + ";");
+                buffer.append("lectura=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("repeticion")) {
-                buffer.append("repeticion=" + aux_List.get(i) + ";");
+                buffer.append("repeticion=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("apariencia")) {
-                buffer.append("apariencia=" + aux_List.get(i) + ";");
+                buffer.append("apariencia=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("codigo_pre")) {
-                buffer.append("codigo_pre=" + aux_List.get(i) + ";");
+                buffer.append("codigo_pre=" + aux_List.get(i) + ";\n");
             } else if (Encabezado.get(i).equalsIgnoreCase("codigo_post")) {
-                buffer.append("codigo_post=" + aux_List.get(i) + ";");
+                buffer.append("codigo_post=" + aux_List.get(i) + ";\n");
             }
-            buffer.append("} \n");
+          
 
-        }
+        }  buffer.append("} \n");
     }
 
+    void CrearFile(String entrada) {
+        //Creo una carpeta en /home/usuario/SalidasDot, en donde va estar todo
+        File folder = new File(System.getProperty("user.home") + File.separator + "SalidasDot");
+
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        //Rutas para el .dot y la imagen .png
+        String ruta_entrada = System.getProperty("user.home") + File.separator + "SalidasDot" + File.separator + "entrada.dot";
+        
+    creararchivo(ruta_entrada,entrada.toString());
+    }
+    
+//Este metodo es generico
+    //Porque crea un archivo plano en base a la ruta y el contenido que se le pase
+    public synchronized void creararchivo(String pfichero,String pcontenido)
+    {   
+        FileWriter archivo = null;
+   
+        try{archivo = new FileWriter(pfichero);} 
+        catch (IOException ex) 
+        {Logger.getLogger(Compilador.class.getName()).log(Level.SEVERE, null, ex);}
+
+        File a = new File(pfichero);        
+        if (!a.exists()){return;}   
+        
+        try(PrintWriter printwriter = new PrintWriter(archivo)) 
+        {
+            printwriter.print(pcontenido);
+            printwriter.close();
+        }
+    }
 }
