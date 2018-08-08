@@ -26,7 +26,7 @@ public class Proyecto1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws  IOException {
-      FileInputStream file = new FileInputStream(new File("E:\\USAC\\2018\\Segundo Semestre\\Compi2\\Proyecto1\\Ejemplomio.xls"));
+      FileInputStream file = new FileInputStream(new File("E:\\USAC\\2018\\Segundo Semestre\\Compi2\\Proyecto1\\Arbol.xls"));
 	Analizador xform =new Analizador();
         xform.Ordenar(file);
         Graficador g = new Graficador();
