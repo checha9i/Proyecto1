@@ -17,7 +17,7 @@ import java.util.List;
 public class Nodo {
       public String title, value;
     public int col, row, id=0;
-    public List<Nodo> childs;
+    public List<Nodo> hijos;
     
     // Constructor para Linea con información detallada
     public Nodo(String title, int row, int col, String value){
@@ -25,7 +25,7 @@ public class Nodo {
         this.col = col;
         this.row = row;
         this.value = value;
-        this.childs = new ArrayList<>();
+        this.hijos = new ArrayList<>();
         this.id =0;
     }
     
@@ -34,7 +34,7 @@ public class Nodo {
         this.title = title;
         this.value = "";
         this.col = this.row = 0;
-        this.childs = new ArrayList<>();
+        this.hijos = new ArrayList<>();
         this.id = 0;
     }
     

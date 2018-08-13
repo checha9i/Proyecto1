@@ -35,6 +35,7 @@ public class Constants {
      public static final String FINALIZARCICLO = "FINALIZAR CICLO";
      public static final String ENTERO = "ENTERO";
      public static final String RANGO = "RANGO";
+     public static final String SELECCIONA_UNO = "SELECCIONA_UNO";
      
 
 }

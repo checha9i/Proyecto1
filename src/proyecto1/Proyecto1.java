@@ -4,16 +4,21 @@
  * and open the template in the editor.
  */
 package proyecto1;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import proyecto1.XLSaXForm.Analizador;
+import proyecto1.XLSaXForm.Analizador.Analyzer;
+import proyecto1.XLSaXForm.Analizador.ParseException;
+import proyecto1.XLSaXForm.Traductor;
 import proyecto1.XLSaXForm.Compilador;
 import proyecto1.XLSaXForm.Graficador;
+import proyecto1.utils.FileManager;
 
 /**
  *
@@ -26,12 +31,20 @@ public class Proyecto1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws  IOException {
-      FileInputStream file = new FileInputStream(new File("E:\\USAC\\2018\\Segundo Semestre\\Compi2\\Proyecto1\\Arbol.xls"));
-	Analizador xform =new Analizador();
-        xform.Ordenar(file);
-        Graficador g = new Graficador();
-        //g.graficarAST(xform.root);
-                
+        FileManager milenguaje=new FileManager();
+      String missentencias=milenguaje.readFile(System.getProperty("user.home") + File.separator +"SalidasDot"+File.separator+"entrada.dot");
+      
+       InputStream txtanalizar = new ByteArrayInputStream(missentencias.getBytes());
+      Analyzer analyzer = new Analyzer(txtanalizar);
+    try {
+        analyzer.INICIO();
+         Graficador g = new Graficador();
+        g.graficarAST(analyzer.root);  
+    } catch (ParseException ex) {
+        Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+    }
+         GUI interfaz=new GUI();
+         //interfaz.setVisible(true);
     }
         
 // TODO code application logic here

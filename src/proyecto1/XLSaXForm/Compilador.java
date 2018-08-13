@@ -29,28 +29,28 @@ public class Compilador
     {
         switch (nodoactual.value) {
             case "cuerpo":
-                this.recorrido((nodoactual.childs.get(0)));
+                this.recorrido((nodoactual.hijos.get(0)));
                 break;
                 
             case "sentencias":
-                for(Nodo hijo: nodoactual.childs)
+                for(Nodo hijo: nodoactual.hijos)
                 {
                     this.recorrido(hijo);
                 }
                 break;
                 
             case "operar":
-                Object valor_operar = this.evaluarExpresion(nodoactual.childs.get(0));
+                Object valor_operar = this.evaluarExpresion(nodoactual.hijos.get(0));
                 
                 break;                
                 
             case "imprimir":
-                Object valor_imprimir = "Imprimir => "+this.evaluarExpresion(nodoactual.childs.get(0));
+                Object valor_imprimir = "Imprimir => "+this.evaluarExpresion(nodoactual.hijos.get(0));
                 
                 break;
                 
             case "desplegar":
-                Object valor_desplegar = "desplegar => "+this.evaluarExpresion(nodoactual.childs.get(0));
+                Object valor_desplegar = "desplegar => "+this.evaluarExpresion(nodoactual.hijos.get(0));
                 JOptionPane.showMessageDialog(null,valor_desplegar.toString(),"Desplegar",1);
                 break;                                
                 
@@ -61,10 +61,10 @@ public class Compilador
     
     public Object evaluarExpresion(Nodo nodoactual)
     {
-        if(nodoactual.childs.size()==2)
+        if(nodoactual.hijos.size()==2)
         {
-            Object izq = this.evaluarExpresion(nodoactual.childs.get(0));
-            Object der = this.evaluarExpresion(nodoactual.childs.get(1));
+            Object izq = this.evaluarExpresion(nodoactual.hijos.get(0));
+            Object der = this.evaluarExpresion(nodoactual.hijos.get(1));
             
             switch (nodoactual.value) 
             {
@@ -84,22 +84,22 @@ public class Compilador
             switch (nodoactual.value) 
             {
                 case "--":                    
-                    Object valor = this.evaluarExpresion(nodoactual.childs.get(0));
+                    Object valor = this.evaluarExpresion(nodoactual.hijos.get(0));
                     Integer val_decremento = Integer.valueOf(valor.toString()) - 1;
                     return val_decremento;
                 
                 case "++":                    
-                    Object valor2 = this.evaluarExpresion(nodoactual.childs.get(0));
+                    Object valor2 = this.evaluarExpresion(nodoactual.hijos.get(0));
                     Integer val_aumento = Integer.valueOf(valor2.toString()) + 1;
                     return val_aumento;
                     
                 case "int":   
-                    Object valor3 = nodoactual.childs.get(0).value;
+                    Object valor3 = nodoactual.hijos.get(0).value;
                     Integer val_int =Integer.valueOf(valor3.toString());
                     return val_int;
                     
                 case "bool":
-                    if(nodoactual.childs.get(0).value.equals("true"))
+                    if(nodoactual.hijos.get(0).value.equals("true"))
                     {
                         return 1;
                     }

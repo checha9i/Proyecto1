@@ -123,7 +123,7 @@ public class Graficador
         //graphviz+="node"+contador+"[label=\""+praiz.value+"\"];\n";
         buffer.append("node").append(contador).append("[label=\"").append(praiz.value).append("\"];\n");
         praiz.id=contador;  contador++;        
-        for(Nodo temp:praiz.childs)
+        for(Nodo temp:praiz.hijos)
         {
             listarNodos(temp,buffer);
         }
@@ -134,7 +134,7 @@ public class Graficador
     //de lo que sera el fichero .dot
     private void enlazarNodos(Nodo praiz, StringBuffer bufffer)
     {        
-        for(Nodo temp:praiz.childs)
+        for(Nodo temp:praiz.hijos)
         {            
             String relacion="\"node"+praiz.id+"\"->";
             relacion+="\"node"+temp.id+"\";\n";
