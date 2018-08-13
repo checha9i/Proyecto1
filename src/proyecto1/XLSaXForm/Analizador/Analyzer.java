@@ -132,7 +132,8 @@ padre.hijos.add(hijo); {if (true) return padre;}
   }
 
   final public Nodo PREGUNTA() throws ParseException {
-Nodo padre,hijo;
+Nodo padre,hijo,hijo2;
+Token t;
     if (jj_2_11(2)) {
       jj_consume_token(ENTERO);
           padre=new Nodo(Constants.ENTERO,0,0,"ENTERO");
@@ -175,13 +176,14 @@ Nodo padre,hijo;
                                                                     {if (true) return padre;}
     } else if (jj_2_16(2)) {
       jj_consume_token(SELECCIONA_UNO);
-      jj_consume_token(ELEGIR);
-                               padre=new Nodo(Constants.SELECCIONA_UNO,0,0,"SELECCIONA_UNO");
+      t = jj_consume_token(NOMBRE);
+                                  padre=new Nodo(Constants.SELECCIONA_UNO,0,0,"SELECCIONA_UNO");
+ padre.hijos.add(new Nodo("nombre",0,0,t.image));
       jj_consume_token(LlaveL);
-      hijo = MUCHOS_CONTENIDOSP();
-                                  padre.hijos.add(hijo);
+      hijo2 = MUCHOS_CONTENIDOSP();
+                                   padre.hijos.add(hijo2);
       jj_consume_token(LlaveR);
-                                                                    {if (true) return padre;}
+                                                                      {if (true) return padre;}
     } else {
       jj_consume_token(-1);
       throw new ParseException();
@@ -576,12 +578,6 @@ Token t;
     finally { jj_save(35, xla); }
   }
 
-  private boolean jj_3_24() {
-    if (jj_scan_token(CALCULAR)) return true;
-    if (jj_scan_token(VALOR_C)) return true;
-    return false;
-  }
-
   private boolean jj_3R_3() {
     Token xsp;
     xsp = jj_scanpos;
@@ -600,12 +596,6 @@ Token t;
     return false;
   }
 
-  private boolean jj_3_22() {
-    if (jj_scan_token(ETIQUETA)) return true;
-    if (jj_scan_token(VALOR_C)) return true;
-    return false;
-  }
-
   private boolean jj_3_23() {
     if (jj_scan_token(PARAMETRO)) return true;
     if (jj_scan_token(VALOR_C)) return true;
@@ -617,14 +607,14 @@ Token t;
     return false;
   }
 
-  private boolean jj_3_1() {
-    if (jj_3R_3()) return true;
-    return false;
-  }
-
   private boolean jj_3_21() {
     if (jj_scan_token(APLICABLE)) return true;
     if (jj_scan_token(VALOR_C)) return true;
+    return false;
+  }
+
+  private boolean jj_3_1() {
+    if (jj_3R_3()) return true;
     return false;
   }
 
@@ -731,7 +721,7 @@ Token t;
 
   private boolean jj_3_16() {
     if (jj_scan_token(SELECCIONA_UNO)) return true;
-    if (jj_scan_token(ELEGIR)) return true;
+    if (jj_scan_token(NOMBRE)) return true;
     return false;
   }
 
@@ -805,15 +795,15 @@ Token t;
     return false;
   }
 
-  private boolean jj_3R_5() {
-    if (jj_scan_token(INICIAR_CICLO)) return true;
-    if (jj_scan_token(LlaveL)) return true;
-    return false;
-  }
-
   private boolean jj_3_35() {
     if (jj_scan_token(REPETICION)) return true;
     if (jj_scan_token(VALOR_C)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_5() {
+    if (jj_scan_token(INICIAR_CICLO)) return true;
+    if (jj_scan_token(LlaveL)) return true;
     return false;
   }
 
@@ -841,15 +831,15 @@ Token t;
     return false;
   }
 
-  private boolean jj_3_8() {
-    if (jj_scan_token(FINALIZAR_AGRUPACION)) return true;
-    if (jj_scan_token(LlaveL)) return true;
-    return false;
-  }
-
   private boolean jj_3_30() {
     if (jj_scan_token(CODIGO_PRE)) return true;
     if (jj_scan_token(VALOR_C)) return true;
+    return false;
+  }
+
+  private boolean jj_3_8() {
+    if (jj_scan_token(FINALIZAR_AGRUPACION)) return true;
+    if (jj_scan_token(LlaveL)) return true;
     return false;
   }
 
@@ -900,8 +890,20 @@ Token t;
     return false;
   }
 
+  private boolean jj_3_24() {
+    if (jj_scan_token(CALCULAR)) return true;
+    if (jj_scan_token(VALOR_C)) return true;
+    return false;
+  }
+
   private boolean jj_3_5() {
     if (jj_3R_5()) return true;
+    return false;
+  }
+
+  private boolean jj_3_22() {
+    if (jj_scan_token(ETIQUETA)) return true;
+    if (jj_scan_token(VALOR_C)) return true;
     return false;
   }
 
@@ -1113,7 +1115,7 @@ Token t;
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[39];
+    boolean[] la1tokens = new boolean[40];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -1130,7 +1132,7 @@ Token t;
         }
       }
     }
-    for (int i = 0; i < 39; i++) {
+    for (int i = 0; i < 40; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

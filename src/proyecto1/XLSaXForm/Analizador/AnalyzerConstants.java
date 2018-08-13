@@ -75,9 +75,11 @@ public interface AnalyzerConstants {
   /** RegularExpression Id. */
   int VALOR_C = 32;
   /** RegularExpression Id. */
-  int LETRA = 33;
+  int NOMBRE = 33;
   /** RegularExpression Id. */
-  int NUM = 34;
+  int LETRA = 34;
+  /** RegularExpression Id. */
+  int NUM = 35;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -94,7 +96,7 @@ public interface AnalyzerConstants {
     "\"NOTA\"",
     "\"ENTERO\"",
     "\"RANGO\"",
-    "\"SELECCIONA_UNO\"",
+    "<SELECCIONA_UNO>",
     "\"ELEGIR\"",
     "\"IDPREGUNTA\"",
     "\"ETIQUETA\"",
@@ -117,6 +119,7 @@ public interface AnalyzerConstants {
     "\"{\"",
     "\"}\"",
     "<VALOR_C>",
+    "<NOMBRE>",
     "<LETRA>",
     "<NUM>",
     "\"\\n\"",

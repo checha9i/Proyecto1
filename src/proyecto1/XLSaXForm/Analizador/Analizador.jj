@@ -26,7 +26,7 @@ TOKEN: {
   |<NOTA:"NOTA">
   |<ENTERO:"ENTERO">
   |<RANGO:"RANGO">
-  |<SELECCIONA_UNO:"SELECCIONA_UNO">
+  |<SELECCIONA_UNO:("selecciona_uno"|"SELECCIONA_UNO")>
   |<ELEGIR:"ELEGIR">
 
   |<ID_PREGUNTA:"IDPREGUNTA">
@@ -51,6 +51,7 @@ TOKEN: {
   |<LlaveL:"{">
   |<LlaveR:"}">
   |<VALOR_C :"~#~"("#"|~["#","~"])*"~#~">
+    |<NOMBRE:(["a" - "z", "A" - "Z"])((["a" - "z", "A" - "Z"])|<NUM>)+>
   |< #LETRA : (["a" - "z", "A" - "Z"]) >
 |< #NUM : (["0" - "9"]) >
 }
@@ -137,7 +138,8 @@ padre=INSTRUCCIONES() <FINALIZAR_CICLO> <LlaveL> <LlaveR>{ return padre;}
 }
 
 Nodo PREGUNTA():{
-Nodo padre,hijo;}
+Nodo padre,hijo,hijo2;
+Token t;}
 {
  <ENTERO>{padre=new Nodo(Constants.ENTERO,0,0,"ENTERO");}
 <LlaveL> hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
@@ -149,8 +151,9 @@ Nodo padre,hijo;}
 <LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
     | <RANGO>{padre=new Nodo(Constants.RANGO,0,0,"RANGO");}
 <LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
-    | <SELECCIONA_UNO><ELEGIR>{padre=new Nodo(Constants.SELECCIONA_UNO,0,0,"SELECCIONA_UNO");}
-<LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
+    | <SELECCIONA_UNO> t=<NOMBRE>{padre=new Nodo(Constants.SELECCIONA_UNO,0,0,"SELECCIONA_UNO");
+ padre.hijos.add(new Nodo("nombre",0,0,t.image));}
+<LlaveL>hijo2=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo2);} <LlaveR>{ return padre;}
 }
 
 Nodo MUCHOS_CONTENIDOSP():{

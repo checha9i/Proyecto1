@@ -62,6 +62,7 @@ public class Traductor {
         Row row;
         boolean error = false;
         int conterror = 0;
+        int selecciona1=0;
         // Recorremos todas las filas para mostrar el contenido de cada celda
         while (rowIterator.hasNext()) {
             //Nodo hijo=new Nodo("Linea",0,0,"Linea");
@@ -147,7 +148,7 @@ public class Traductor {
         for (int i = 0; i < Encabezado.size(); i++) {
             if (Encabezado.get(i).equalsIgnoreCase("Tipo")) {
                 auxEncabezado.add(Encabezado.get(i));
-                auxOrdenado.add(aux_List.get(i));
+System.out.println(aux_List.get(i));                auxOrdenado.add(aux_List.get(i));
             }
         }
         for (int i = 0; i < Encabezado.size(); i++) {
@@ -178,7 +179,7 @@ public class Traductor {
                 } else if (aux_List.get(i).equalsIgnoreCase("finalizar Agrupacion")) {
 
                     estado++;
-                    buffer.append("Finalizar Agrupacion{}\n");
+                    buffer.append("Finalizar Agrupacion{\n");
                     break;
                 } else if (aux_List.get(i).equalsIgnoreCase("Iniciar ciclo")) {
                     String cad = aux_List.get(i).toString();
@@ -189,7 +190,7 @@ public class Traductor {
                 } else if (aux_List.get(i).equalsIgnoreCase("finalizar ciclo")) {
                     estadociclo++;
 
-                    buffer.append("Finalizar Ciclo{}\n");
+                    buffer.append("Finalizar Ciclo{\n");
                     break;
                 } else {
                     String cad = aux_List.get(i).toString();
@@ -200,75 +201,95 @@ public class Traductor {
             } else if (Encabezado.get(i).equalsIgnoreCase("idpregunta")) {
 
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("idpregunta:" + aux_List.get(i) + ":\n");
+                    buffer.append("idpregunta~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("etiqueta")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("etiqueta~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("etiqueta~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("parametro")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("parametro~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("parametro~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("calcular")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("calcular~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("calcular~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("aplicable ")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("aplicable~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("aplicable~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("sugerencia")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("sugerencia~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("sugerencia~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("restringir")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("restringir~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("restringir~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("restringirmsn")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("restringirmsn~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("restringirmsn~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("requerido")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("requerido~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("requerido~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("pordefecto")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("pordefecto~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("pordefecto~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("lectura")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("lectura~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("lectura~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("repeticion")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("repeticion~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("repeticion~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("apariencia")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("apariencia~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("apariencia~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("codigo_pre")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("codigo_pre~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("codigo_pre~#~" + aux_List.get(i) + "~#~\n");
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("codigo_post")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("codigo_post~~#~~" + aux_List.get(i) + "~~#~~\n");
+                    buffer.append("codigo_post~#~" + aux_List.get(i) + "~#~\n");
+                }
+            }  else if (Encabezado.get(i).equalsIgnoreCase("multimedia")) {
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    buffer.append("multimedia~#~" + aux_List.get(i) + "~#~\n");
+                }
+            }
+             else if (Encabezado.get(i).equalsIgnoreCase("decimal")) {
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    buffer.append("decimal~#~" + aux_List.get(i) + "~#~\n");
+                }
+            }
+               else if (Encabezado.get(i).equalsIgnoreCase("hora")) {
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    buffer.append("hora~#~" + aux_List.get(i) + "~#~\n");
+                }
+            }   else if (Encabezado.get(i).equalsIgnoreCase("fechahora")) {
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    buffer.append("fechahora~#~" + aux_List.get(i) + "~#~\n");
                 }
             }
 
         }
 
-        if (estado < 2) {
+        if (estado >1) {
 
             buffer.append("} \n");
-        } else if (estadociclo < 2) {
+        } else
+        if (estadociclo >1) {
 
             buffer.append("} \n");
         } else {
+              buffer.append("} \n");
             estado = 0;
             estadociclo--;
             estadociclo--;

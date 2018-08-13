@@ -36,15 +36,11 @@ public class Proyecto1 {
       
        InputStream txtanalizar = new ByteArrayInputStream(missentencias.getBytes());
       Analyzer analyzer = new Analyzer(txtanalizar);
-    try {
-        analyzer.INICIO();
-         Graficador g = new Graficador();
-        g.graficarAST(analyzer.root);  
-    } catch (ParseException ex) {
-        Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        //analyzer.INICIO();
+        // Graficador g = new Graficador();
+        //g.graficarAST(analyzer.root);
          GUI interfaz=new GUI();
-         //interfaz.setVisible(true);
+         interfaz.setVisible(true);
     }
         
 // TODO code application logic here
