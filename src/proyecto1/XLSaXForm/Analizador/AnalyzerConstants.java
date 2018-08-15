@@ -31,55 +31,53 @@ public interface AnalyzerConstants {
   /** RegularExpression Id. */
   int SELECCIONA_UNO = 10;
   /** RegularExpression Id. */
-  int ELEGIR = 11;
+  int ID_PREGUNTA = 11;
   /** RegularExpression Id. */
-  int ID_PREGUNTA = 12;
+  int ETIQUETA = 12;
   /** RegularExpression Id. */
-  int ETIQUETA = 13;
+  int PARAMETRO = 13;
   /** RegularExpression Id. */
-  int PARAMETRO = 14;
+  int CALCULAR = 14;
   /** RegularExpression Id. */
-  int CALCULAR = 15;
+  int APLICABLE = 15;
   /** RegularExpression Id. */
-  int APLICABLE = 16;
+  int SUGERENCIA = 16;
   /** RegularExpression Id. */
-  int SUGERENCIA = 17;
+  int REQUERIDO = 17;
   /** RegularExpression Id. */
-  int REQUERIDO = 18;
+  int PORDEFECTO = 18;
   /** RegularExpression Id. */
-  int PORDEFECTO = 19;
+  int REQUERIDOMSN = 19;
   /** RegularExpression Id. */
-  int REQUERIDOMSN = 20;
+  int CODIGO_POST = 20;
   /** RegularExpression Id. */
-  int CODIGO_POST = 21;
+  int CODIGO_PRE = 21;
   /** RegularExpression Id. */
-  int CODIGO_PRE = 22;
+  int RESTRINGIR = 22;
   /** RegularExpression Id. */
-  int RESTRINGIR = 23;
+  int RESTRINGIRMSN = 23;
   /** RegularExpression Id. */
-  int RESTRINGIRMSN = 24;
+  int LECTURA = 24;
   /** RegularExpression Id. */
-  int LECTURA = 25;
+  int APARIENCIA = 25;
   /** RegularExpression Id. */
-  int APARIENCIA = 26;
+  int REPETICION = 26;
   /** RegularExpression Id. */
-  int REPETICION = 27;
+  int MULTIMEDIA = 27;
   /** RegularExpression Id. */
-  int MULTIMEDIA = 28;
+  int Igual = 28;
   /** RegularExpression Id. */
-  int Igual = 29;
+  int LlaveL = 29;
   /** RegularExpression Id. */
-  int LlaveL = 30;
+  int LlaveR = 30;
   /** RegularExpression Id. */
-  int LlaveR = 31;
+  int VALOR_C = 31;
   /** RegularExpression Id. */
-  int VALOR_C = 32;
+  int NOMBRE = 32;
   /** RegularExpression Id. */
-  int NOMBRE = 33;
+  int LETRA = 33;
   /** RegularExpression Id. */
-  int LETRA = 34;
-  /** RegularExpression Id. */
-  int NUM = 35;
+  int NUM = 34;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -96,8 +94,7 @@ public interface AnalyzerConstants {
     "\"NOTA\"",
     "\"ENTERO\"",
     "\"RANGO\"",
-    "<SELECCIONA_UNO>",
-    "\"ELEGIR\"",
+    "\"selecciona_uno\"",
     "\"IDPREGUNTA\"",
     "\"ETIQUETA\"",
     "\"PARAMETRO\"",

@@ -21,17 +21,62 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
+import proyecto1.XLSaXForm.Nodo;
+import proyecto1.XLSaXForm.Analizador.Analyzer;
+import proyecto1.utils.CrearArchivo;
 /**
  *
  * @author Javier Solares
  */
-public class Traductor {
+public class LecturaExcel {
+CrearArchivo archivo=new CrearArchivo();
 
-    public Nodo root;
     ArrayList<String> Encabezado = new ArrayList<String>();
     ArrayList<String> aux_list = new ArrayList<String>();
     StringBuffer buffer = new StringBuffer();
 
+    
+    public void Configuraciones(FileInputStream file) throws IOException {
+    
+    }
+    public void Opciones(FileInputStream file) throws IOException {
+    
+    }
+    
+    public boolean Verificaciones(FileInputStream file) throws IOException {
+        boolean validacion=false;
+    HSSFWorkbook workbook = new HSSFWorkbook(file);
+    System.out.println(workbook.getNumberOfSheets());
+        HSSFSheet sheet = workbook.getSheetAt(0);
+    HSSFSheet sheet1 = workbook.getSheetAt(1);
+        switch(workbook.getNumberOfSheets()){
+        case 2:
+            
+            break;
+        case 3:
+    
+    HSSFSheet sheet2 = workbook.getSheetAt(2);
+            
+            break;
+        default:
+            System.out.println("Error");
+            return false;
+    
+    }
+    
+
+    
+    if(sheet.getSheetName().equalsIgnoreCase("encuesta")){
+        validacion=true;
+    
+    }
+        
+        
+    
+    
+    return validacion;
+    }
+    
     public void Ordenar(FileInputStream file) throws IOException {
         //Nodo padre, hijo;
         // Crear el objeto que tendra el libro de Excel
@@ -133,7 +178,7 @@ public class Traductor {
         workbook.close();
 
         if (conterror == 0) {
-            CrearFile(buffer.toString());
+            archivo.CrearFile(buffer.toString());
         } else {
             conterror = 0;
             error = false;
@@ -148,7 +193,7 @@ public class Traductor {
         for (int i = 0; i < Encabezado.size(); i++) {
             if (Encabezado.get(i).equalsIgnoreCase("Tipo")) {
                 auxEncabezado.add(Encabezado.get(i));
-System.out.println(aux_List.get(i));                auxOrdenado.add(aux_List.get(i));
+             auxOrdenado.add(aux_List.get(i));
             }
         }
         for (int i = 0; i < Encabezado.size(); i++) {
@@ -180,7 +225,7 @@ System.out.println(aux_List.get(i));                auxOrdenado.add(aux_List.get
 
                     estado++;
                     buffer.append("Finalizar Agrupacion{\n");
-                    break;
+               
                 } else if (aux_List.get(i).equalsIgnoreCase("Iniciar ciclo")) {
                     String cad = aux_List.get(i).toString();
 
@@ -191,11 +236,29 @@ System.out.println(aux_List.get(i));                auxOrdenado.add(aux_List.get
                     estadociclo++;
 
                     buffer.append("Finalizar Ciclo{\n");
-                    break;
+
                 } else {
                     String cad = aux_List.get(i).toString();
+                    String aux="";
+                    boolean primertoken=false;
+                    for(int n=0; n <cad.length(); n++) {
+                     aux+=cad.charAt(n);
+                    if(aux.equals("selecciona_uno")){
+                    buffer.append(aux);
+                    aux="";
+                    primertoken=true;
+                    }
+                    
+                     }
+                    if(primertoken){
+                        aux=aux.replace(" ", "/");
+                    buffer.append(aux+"{\n");
+                    }else{
+                    buffer.append(cad+"{\n");
+                    }
+                    
 
-                    buffer.append(cad + "{\n");
+                    
                 }
 
             } else if (Encabezado.get(i).equalsIgnoreCase("idpregunta")) {
@@ -215,7 +278,7 @@ System.out.println(aux_List.get(i));                auxOrdenado.add(aux_List.get
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
                     buffer.append("calcular~#~" + aux_List.get(i) + "~#~\n");
                 }
-            } else if (Encabezado.get(i).equalsIgnoreCase("aplicable ")) {
+            } else if (Encabezado.get(i).equalsIgnoreCase("aplicable")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
                     buffer.append("aplicable~#~" + aux_List.get(i) + "~#~\n");
                 }
@@ -281,58 +344,13 @@ System.out.println(aux_List.get(i));                auxOrdenado.add(aux_List.get
 
         }
 
-        if (estado >1) {
-
-            buffer.append("} \n");
-        } else
-        if (estadociclo >1) {
-
-            buffer.append("} \n");
-        } else {
+   
               buffer.append("} \n");
             estado = 0;
             estadociclo--;
             estadociclo--;
-        }
+        
         return false;
     }
 
-    void CrearFile(String entrada) {
-
-        System.out.print("Correcto");
-        //Creo una carpeta en /home/usuario/SalidasDot, en donde va estar todo
-        File folder = new File(System.getProperty("user.home") + File.separator + "SalidasDot");
-
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        //Rutas para el .dot y la imagen .png
-        String ruta_entrada = System.getProperty("user.home") + File.separator + "SalidasDot" + File.separator + "entrada.txt";
-
-        creararchivo(ruta_entrada, entrada.toString());
-
-    }
-
-//Este metodo es generico
-    //Porque crea un archivo plano en base a la ruta y el contenido que se le pase
-    public synchronized void creararchivo(String pfichero, String pcontenido) {
-        FileWriter archivo = null;
-
-        try {
-            archivo = new FileWriter(pfichero);
-        } catch (IOException ex) {
-            Logger.getLogger(Compilador.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        File a = new File(pfichero);
-        if (!a.exists()) {
-            return;
-        }
-
-        try (PrintWriter printwriter = new PrintWriter(archivo)) {
-            printwriter.print(pcontenido);
-            printwriter.close();
-        }
-    }
 }

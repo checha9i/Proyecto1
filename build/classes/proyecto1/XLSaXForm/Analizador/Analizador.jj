@@ -26,8 +26,8 @@ TOKEN: {
   |<NOTA:"NOTA">
   |<ENTERO:"ENTERO">
   |<RANGO:"RANGO">
-  |<SELECCIONA_UNO:("selecciona_uno"|"SELECCIONA_UNO")>
-  |<ELEGIR:"ELEGIR">
+  |<SELECCIONA_UNO:"selecciona_uno">
+
 
   |<ID_PREGUNTA:"IDPREGUNTA">
   |<ETIQUETA:"ETIQUETA">
@@ -51,7 +51,8 @@ TOKEN: {
   |<LlaveL:"{">
   |<LlaveR:"}">
   |<VALOR_C :"~#~"("#"|~["#","~"])*"~#~">
-    |<NOMBRE:(["a" - "z", "A" - "Z"])((["a" - "z", "A" - "Z"])|<NUM>)+>
+   |<NOMBRE : "/"<LETRA>(<LETRA>|<NUM>|"_")* >
+
   |< #LETRA : (["a" - "z", "A" - "Z"]) >
 |< #NUM : (["0" - "9"]) >
 }
@@ -60,6 +61,7 @@ TOKEN: {
 SKIP:{
 "\n"
 |" "
+
 |"\t"
 |"\r"
 }
@@ -76,23 +78,25 @@ hijo = INSTRUCCIONES() { padre.hijos.add(hijo); root = padre; } <EOF>
 
 Nodo INSTRUCCIONES():
 {
-  Nodo padre,hijo;
+  Nodo padre,hijo,hijo2;
 }
 {
   { padre = new Nodo("INSTRUCCIONES",0,0,"INSTRUCCIONES"); }
-  ( hijo = INICIAR() { padre.hijos.add(hijo); } )+
+   (hijo = INICIAR() { padre.hijos.add(hijo); })*
   { return padre; }
-  | <EOF>
+  | <EOF>{padre= new Nodo(" ",0,0,""); return padre;}
 }
 
 
 
 Nodo INICIAR():{
-  Nodo padre,hijo;}
+  Nodo padre,hijo;
+}
 {
-padre=INICIARAGRUPACION(){return padre;}
+padre=PREGUNTA(){ return padre;}
+|padre=INICIARAGRUPACION(){return padre;}
 |padre=INICIARCICLO(){return padre;}
-|padre=PREGUNTA(){return padre;}
+
 }
 
 
@@ -101,40 +105,32 @@ Nodo INICIARAGRUPACION():{
 }
 {
 <INICIAR_AGRUPACION>{padre=new Nodo(Constants.INICIARAGRUPACION,0,0,"INICIAR AGRUPACION");} 
-<LlaveL> hijo=PARAMETROAGRUPACION() <LlaveR> 
+<LlaveL> hijo=MUCHOS_CONTENIDOSP() <LlaveR> 
 hijo2=FINAGRUPACION(){padre.hijos.add(hijo);padre.hijos.add(hijo2); return padre;}
 }
 
 
 Nodo FINAGRUPACION():{
- Nodo padre, hijo;
+ Nodo padre, hijo,hijo2;
 }{
-padre=INSTRUCCIONES() <FINALIZAR_AGRUPACION> <LlaveL> <LlaveR>{ return padre;}
-|<FINALIZAR_AGRUPACION> <LlaveL> <LlaveR>{padre=new Nodo(""); return padre;}
+padre=INSTRUCCIONES() <FINALIZAR_AGRUPACION> <LlaveL> hijo2=MUCHOS_CONTENIDOSP() <LlaveR>{hijo=new Nodo("FINALIZAR AGRUPACION",0,0,"FINALIZAR AGRUPACION"); padre.hijos.add(hijo);hijo.hijos.add(hijo2);   return padre;}
+|<FINALIZAR_AGRUPACION> <LlaveL> hijo=MUCHOS_CONTENIDOSP() <LlaveR>{padre=new Nodo("FINALIZAR AGRUPACION",0,0,"FINALIZAR AGRUPACION"); padre.hijos.add(hijo);  return padre;}
 }
 
-
-Nodo PARAMETROAGRUPACION():{
- Nodo padre, hijo;
-Token t;}{
-<ID_PREGUNTA> {padre=new Nodo("ID PREGUNTA",0,0,"ID PREGUNTA");} t=<VALOR_C> 
-{String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
-padre.hijos.add(hijo); return padre;}
-}
 
 Nodo INICIARCICLO():{
  Nodo padre, hijo,hijo2;}
 {
 <INICIAR_CICLO>{padre=new Nodo(Constants.INICIARCICLO,0,0,"INICIAR CICLO");} 
-<LlaveL> hijo=PARAMETROAGRUPACION() <LlaveR> 
+<LlaveL> hijo=MUCHOS_CONTENIDOSP() <LlaveR> 
 hijo2=FINCICLO(){padre.hijos.add(hijo);padre.hijos.add(hijo2); return padre;}
 }
 
 Nodo FINCICLO():{
- Nodo padre, hijo;
+ Nodo padre, hijo,hijo2;
 }{
-padre=INSTRUCCIONES() <FINALIZAR_CICLO> <LlaveL> <LlaveR>{ return padre;}
-|<FINALIZAR_CICLO> <LlaveL> <LlaveR>{padre=new Nodo(""); return padre;}
+padre=INSTRUCCIONES() <FINALIZAR_CICLO> <LlaveL> hijo2=MUCHOS_CONTENIDOSP() <LlaveR>{hijo=new Nodo("FINALIZAR CICLO",0,0,"FINALIZAR CICLO"); padre.hijos.add(hijo);hijo.hijos.add(hijo2);  return padre;}
+|<FINALIZAR_CICLO> <LlaveL> hijo=MUCHOS_CONTENIDOSP() <LlaveR>{padre=new Nodo("FINALIZAR CICLO",0,0,"FINALIZAR CICLO"); padre.hijos.add(hijo);  return padre;}
 }
 
 Nodo PREGUNTA():{
@@ -151,9 +147,9 @@ Token t;}
 <LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
     | <RANGO>{padre=new Nodo(Constants.RANGO,0,0,"RANGO");}
 <LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
-    | <SELECCIONA_UNO> t=<NOMBRE>{padre=new Nodo(Constants.SELECCIONA_UNO,0,0,"SELECCIONA_UNO");
- padre.hijos.add(new Nodo("nombre",0,0,t.image));}
-<LlaveL>hijo2=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo2);} <LlaveR>{ return padre;}
+    | <SELECCIONA_UNO> t=<NOMBRE>{padre=new Nodo(Constants.SELECCIONA_UNO,0,0,"SELECCIONA_UNO");}//{padre=new Nodo(Constants.SELECCIONA_UNO,0,0,"SELECCIONA_UNO");
+ {hijo2=new Nodo("valor", t.beginLine, t.beginColumn,t.image); padre.hijos.add(hijo2);}
+<LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
 }
 
 Nodo MUCHOS_CONTENIDOSP():{
@@ -172,55 +168,55 @@ Nodo padre,hijo;
 Token t;}
 {
     <ID_PREGUNTA> {padre=new Nodo("ID PREGUNTA",0,0,"ID PREGUNTA");}  t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~",""); hijo=new Nodo(Constants.IDPREGUNTA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~",""); hijo=new Nodo(Constants.IDPREGUNTA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
   
     |<APLICABLE> {padre=new Nodo("APLICABLE",0,0,"APLICABLE");}  t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~",""); hijo=new Nodo(Constants.APLICABLE, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~",""); hijo=new Nodo(Constants.APLICABLE, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
        |<ETIQUETA> {padre=new Nodo("ETIQUETA",0,0,"ETIQUETA");}  t=<VALOR_C>
-     {String aux=t.image.replace("#",""); aux=aux.replace("~",""); hijo=new Nodo(Constants.ETIQUETA, t.beginLine, t.beginColumn, aux.replace("\"","")); padre.hijos.add(hijo); return padre;}
+     {String aux=t.image.replace("#",""); aux=aux.replace("~",""); hijo=new Nodo(Constants.ETIQUETA, t.beginLine, t.beginColumn, aux.replace("\"","\\\"")); padre.hijos.add(hijo); return padre;}
     |<PARAMETRO> {padre=new Nodo("PARAMETRO",0,0,"PARAMETRO");}  t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~",""); hijo=new Nodo(Constants.PARAMETRO, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~",""); hijo=new Nodo(Constants.PARAMETRO, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
     |<CALCULAR> {padre=new Nodo("CALCULAR",0,0,"CALCULAR");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.CALCULAR, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.CALCULAR, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
     |<SUGERENCIA>{padre=new Nodo("SUGERENCIA",0,0,"SUGERENCIA");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
      |<REQUERIDO>{padre=new Nodo("REQUERIDO",0,0,"REQUERIDO");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
      |<PORDEFECTO>{padre=new Nodo("PORDEFECTO",0,0,"PORDEFECTO");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
      |<REQUERIDOMSN>{padre=new Nodo("REQUERIDOMSN",0,0,"REQUERIDOMSN");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
      |<CODIGO_POST>{padre=new Nodo("CODIGO_POST",0,0,"CODIGO_POST");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
      |<CODIGO_PRE>{padre=new Nodo("CODIGO_PRE",0,0,"CODIGO_PRE");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
      |<RESTRINGIR>{padre=new Nodo("RESTRINGIR",0,0,"RESTRINGIR");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
      |<RESTRINGIRMSN>{padre=new Nodo("RESTRINGIRMSN",0,0,"RESTRINGIRMSN");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
      |<LECTURA>{padre=new Nodo("LECTURA",0,0,"LECTURA");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
      |<APARIENCIA>{padre=new Nodo("APARIENCIA",0,0,"APARIENCIA");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
      |<REPETICION>{padre=new Nodo("REPETICION",0,0,"REPETICION");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
      |<MULTIMEDIA>{padre=new Nodo("MULTIMEDIA",0,0,"MULTIMEDIA");} t=<VALOR_C>  
-     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"",""));
+     {String aux=t.image.replace("#",""); aux=aux.replace("~","");  hijo=new Nodo(Constants.SUGERENCIA, t.beginLine, t.beginColumn, aux.replace("\"","\\\""));
      padre.hijos.add(hijo); return padre;}
 }
 

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import proyecto1.XLSaXForm.Graficador;
-import proyecto1.XLSaXForm.Traductor;
+import proyecto1.XLSaXForm.LecturaExcel;
 import proyecto1.XLSaXForm.Analizador.Analyzer;
 import proyecto1.XLSaXForm.Analizador.ParseException;
 import proyecto1.utils.FileManager;
@@ -71,6 +71,7 @@ public class GUI extends javax.swing.JFrame {
         jMenuItem5.setText("Abrir");
         jMenu1.add(jMenuItem5);
 
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem3.setText("Generar");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,9 +137,9 @@ fc.setFileFilter(filtroxls);
           Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
           System.out.println("No existe el archivo.");
       }
-	Traductor xform =new Traductor();
+	LecturaExcel xform =new LecturaExcel();
       try {
-          xform.Ordenar(file);
+          xform.Verificaciones(file);
       } catch (IOException ex) {
           Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -150,6 +151,7 @@ fc.setFileFilter(filtroxls);
     try {
         analyzer.INICIO();
          Graficador g = new Graficador();
+         //xform.General(analyzer.root);
         g.graficarAST(analyzer.root);  
     } catch (ParseException ex) {
         Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);

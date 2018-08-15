@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import proyecto1.XLSaXForm.Analizador.Analyzer;
 import proyecto1.XLSaXForm.Analizador.ParseException;
-import proyecto1.XLSaXForm.Traductor;
+import proyecto1.XLSaXForm.LecturaExcel;
 import proyecto1.XLSaXForm.Compilador;
 import proyecto1.XLSaXForm.Graficador;
 import proyecto1.utils.FileManager;
@@ -36,8 +36,13 @@ public class Proyecto1 {
       
        InputStream txtanalizar = new ByteArrayInputStream(missentencias.getBytes());
       Analyzer analyzer = new Analyzer(txtanalizar);
-        //analyzer.INICIO();
-        // Graficador g = new Graficador();
+        try {
+            analyzer.INICIO();
+        } catch (ParseException ex) {
+            Logger.getLogger(Proyecto1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         Graficador g = new Graficador();
+        
         //g.graficarAST(analyzer.root);
          GUI interfaz=new GUI();
          interfaz.setVisible(true);
