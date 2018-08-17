@@ -50,6 +50,7 @@ TOKEN: {
   |<Igual:"=">
   |<LlaveL:"{">
   |<LlaveR:"}">
+
   |<VALOR_C :"~#~"("#"|~["#","~"])*"~#~">
    |<NOMBRE : "/"<LETRA>(<LETRA>|<NUM>|"_")* >
 
