@@ -29,55 +29,65 @@ public interface AnalyzerConstants {
   /** RegularExpression Id. */
   int RANGO = 9;
   /** RegularExpression Id. */
-  int SELECCIONA_UNO = 10;
+  int DECIMAL = 10;
   /** RegularExpression Id. */
-  int ID_PREGUNTA = 11;
+  int HORA = 11;
   /** RegularExpression Id. */
-  int ETIQUETA = 12;
+  int FECHAHORA = 12;
   /** RegularExpression Id. */
-  int PARAMETRO = 13;
+  int CONDICIONAL = 13;
   /** RegularExpression Id. */
-  int CALCULAR = 14;
+  int SELECCIONA_MULTIPLES = 14;
   /** RegularExpression Id. */
-  int APLICABLE = 15;
+  int SELECCIONA_UNO = 15;
   /** RegularExpression Id. */
-  int SUGERENCIA = 16;
+  int ID_PREGUNTA = 16;
   /** RegularExpression Id. */
-  int REQUERIDO = 17;
+  int ETIQUETA = 17;
   /** RegularExpression Id. */
-  int PORDEFECTO = 18;
+  int PARAMETRO = 18;
   /** RegularExpression Id. */
-  int REQUERIDOMSN = 19;
+  int CALCULAR = 19;
   /** RegularExpression Id. */
-  int CODIGO_POST = 20;
+  int APLICABLE = 20;
   /** RegularExpression Id. */
-  int CODIGO_PRE = 21;
+  int SUGERENCIA = 21;
   /** RegularExpression Id. */
-  int RESTRINGIR = 22;
+  int REQUERIDO = 22;
   /** RegularExpression Id. */
-  int RESTRINGIRMSN = 23;
+  int PORDEFECTO = 23;
   /** RegularExpression Id. */
-  int LECTURA = 24;
+  int REQUERIDOMSN = 24;
   /** RegularExpression Id. */
-  int APARIENCIA = 25;
+  int CODIGO_POST = 25;
   /** RegularExpression Id. */
-  int REPETICION = 26;
+  int CODIGO_PRE = 26;
   /** RegularExpression Id. */
-  int MULTIMEDIA = 27;
+  int RESTRINGIR = 27;
   /** RegularExpression Id. */
-  int Igual = 28;
+  int RESTRINGIRMSN = 28;
   /** RegularExpression Id. */
-  int LlaveL = 29;
+  int LECTURA = 29;
   /** RegularExpression Id. */
-  int LlaveR = 30;
+  int APARIENCIA = 30;
   /** RegularExpression Id. */
-  int VALOR_C = 31;
+  int REPETICION = 31;
   /** RegularExpression Id. */
-  int NOMBRE = 32;
+  int MULTIMEDIA = 32;
   /** RegularExpression Id. */
-  int LETRA = 33;
+  int Igual = 33;
   /** RegularExpression Id. */
-  int NUM = 34;
+  int LlaveL = 34;
+  /** RegularExpression Id. */
+  int LlaveR = 35;
+  /** RegularExpression Id. */
+  int VALOR_C = 36;
+  /** RegularExpression Id. */
+  int NOMBRE = 37;
+  /** RegularExpression Id. */
+  int LETRA = 38;
+  /** RegularExpression Id. */
+  int NUM = 39;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -94,15 +104,20 @@ public interface AnalyzerConstants {
     "\"NOTA\"",
     "\"ENTERO\"",
     "\"RANGO\"",
+    "\"DECIMAL\"",
+    "\"HORA\"",
+    "\"FECHAHORA\"",
+    "\"CONDICIONAL\"",
+    "\"SELECCIONA_MULTIPLES\"",
     "\"selecciona_uno\"",
     "\"IDPREGUNTA\"",
     "\"ETIQUETA\"",
     "\"PARAMETRO\"",
-    "\"CALCULAR\"",
+    "\"CALCULO\"",
     "\"APLICABLE\"",
-    "\"SUGERENCIA\"",
+    "\"SUGERIR\"",
     "\"REQUERIDO\"",
-    "\"PORDEFECTO\"",
+    "\"PREDETERMINADO\"",
     "\"REQUERIDOMSN\"",
     "\"CODIGO_POST\"",
     "\"CODIGO_PRE\"",

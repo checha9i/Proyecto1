@@ -32,102 +32,23 @@ import proyecto1.utils.CrearArchivo;
 public class LecturaExcel {
 
     CrearArchivo archivo = new CrearArchivo();
+    CrearArchivo archivo2 = new CrearArchivo();
+    CrearArchivo archivo3 = new CrearArchivo();
 
     ArrayList<String> Encabezado = new ArrayList<String>();
+    ArrayList<String> Encabezado2 = new ArrayList<String>();
+    ArrayList<String> Encabezado3 = new ArrayList<String>();
     ArrayList<String> aux_list = new ArrayList<String>();
+    ArrayList<String> aux_list2 = new ArrayList<String>();
+    ArrayList<String> aux_list3 = new ArrayList<String>();
     StringBuffer buffer = new StringBuffer();
-
-    public void Configuraciones(FileInputStream file, int i) throws IOException {
-
-    }
-
-    public void Opciones(FileInputStream file, int i) throws IOException {
-        HSSFWorkbook workbook = new HSSFWorkbook(file);
-        /*
-	
-	 * Obtenemos la primera pestaña a la que se quiera procesar indicando el indice.
-	
-	 * Una vez obtenida la hoja excel con las filas que se quieren leer obtenemos el iterator
-	
-	 * que nos permite recorrer cada una de las filas que contiene.
-	
-         */
-        HSSFSheet sheet = workbook.getSheetAt(i);
-        Iterator<Row> rowIterator = sheet.iterator();
-        int contadorFila = 0;
-        int contadorCol = 0;
-        Row row;
-        boolean error = false;
-        int conterror = 0;
-
-        // Recorremos todas las filas para mostrar el contenido de cada celda
-        while (rowIterator.hasNext()) {
-            row = rowIterator.next();
-
-            // Obtenemos el iterator que permite recorres todas las celdas de una fila
-            Iterator<Cell> cellIterator = row.cellIterator();
-            Cell celda;
-            contadorCol = 0;
-            while (cellIterator.hasNext()) {
-                celda = cellIterator.next();
-                if (contadorFila == 0) {
-                    Encabezado.add(celda.getStringCellValue());
-                } else {
-                    // Dependiendo del formato de la celda el valor se debe mostrar como String, Fecha, boolean, entero...
-                    switch (celda.getCellType()) {
-                        case Cell.CELL_TYPE_NUMERIC:
-                            System.out.println(celda.getStringCellValue());
-                            contadorCol++;
-                            break;
-
-                        case Cell.CELL_TYPE_STRING:
-                            aux_list.add(celda.getStringCellValue());
-                            contadorCol++;
-                            break;
-                        case Cell.CELL_TYPE_BOOLEAN:
-                            if (celda.getBooleanCellValue() == true) {
-                                aux_list.add("true");
-                            } else {
-                                aux_list.add("false");
-                            }
-                            contadorCol++;
-                            break;
-                        default:
-                            // System.out.println("false");
-                            aux_list.add("Viene-Vacio");
-                            contadorCol++;
-
-                    }
-
-                }
-
-            }
-            if (contadorFila > 0) {
-                error = ordenar_opciones(Encabezado, aux_list);
-                if (error == true) {
-                    conterror++;
-                }
-                aux_list.clear();
-            }
-            contadorFila++;
-        }
-
-        // cerramos el libro excel	
-        workbook.close();
-
-        if (conterror == 0) {
-            archivo.CrearFile(buffer.toString());
-        } else {
-            conterror = 0;
-            error = false;
-            System.out.println("ERROR");
-        }
-    }
+    StringBuffer buffer2 = new StringBuffer();
+    StringBuffer buffer3 = new StringBuffer();
 
     public boolean Verificaciones(FileInputStream file) throws IOException {
         boolean validacion = false;
         HSSFWorkbook workbook = new HSSFWorkbook(file);
-        System.out.println(workbook.getNumberOfSheets());
+        //System.out.println(workbook.getNumberOfSheets());
         HSSFSheet sheet = workbook.getSheetAt(0);
         HSSFSheet sheet1 = workbook.getSheetAt(1);
         HSSFSheet sheet2 = workbook.getSheetAt(2);
@@ -163,8 +84,8 @@ public class LecturaExcel {
                 }
                 //si las dos son true el archivo es correcto y procedemos a realizar el parseo
                 if (hojaencuesta && hojaopciones) {
-                    encuesta(file, numencuesta);
-                    Opciones(file, numopciones);
+                    encuesta(workbook, numencuesta);
+                     Opciones(workbook, numopciones);
                 } else {
                     System.out.println("Algo esta mal.");
                 }
@@ -189,15 +110,15 @@ public class LecturaExcel {
                 }
 
                 //verificamos ahora si la hoja opciones existe
-                if (sheet.getSheetName().equalsIgnoreCase("opciones") && hojaencuesta == false) {
+                if (sheet.getSheetName().equalsIgnoreCase("opciones") && hojaopciones == false) {
                     hojaopciones = true;
                     numopciones = 0;
 
-                } else if (sheet1.getSheetName().equalsIgnoreCase("opciones") && hojaencuesta == false) {
+                } else if (sheet1.getSheetName().equalsIgnoreCase("opciones") && hojaopciones == false) {
                     hojaopciones = true;
 
                     numopciones = 1;
-                } else if (sheet2.getSheetName().equalsIgnoreCase("opciones") && hojaencuesta == false) {
+                } else if (sheet2.getSheetName().equalsIgnoreCase("opciones") && hojaopciones == false) {
                     hojaopciones = true;
 
                     numopciones = 2;
@@ -206,26 +127,26 @@ public class LecturaExcel {
                 }
 
                 //verificamos ahora si la hoja opciones existe
-                if (sheet.getSheetName().equalsIgnoreCase("configuracion") && hojaencuesta == false) {
+                if (sheet.getSheetName().equalsIgnoreCase("configuracion") && hojaconfig == false) {
                     hojaconfig = true;
-                    numopciones = 0;
+                    numconfig = 0;
 
-                } else if (sheet1.getSheetName().equalsIgnoreCase("configuracion") && hojaencuesta == false) {
-                    hojaconfig = true;
-
-                    numopciones = 1;
-                } else if (sheet2.getSheetName().equalsIgnoreCase("configuracion") && hojaencuesta == false) {
+                } else if (sheet1.getSheetName().equalsIgnoreCase("configuracion") && hojaconfig == false) {
                     hojaconfig = true;
 
-                    numopciones = 2;
+                    numconfig = 1;
+                } else if (sheet2.getSheetName().equalsIgnoreCase("configuracion") && hojaconfig == false) {
+                    hojaconfig = true;
+
+                    numconfig = 2;
                 } else {
                     System.out.println("Error, No existe la hoja Configuracion");
                 }
                 //si las dos son true el archivo es correcto y procedemos a realizar el parseo
                 if (hojaencuesta && hojaopciones && hojaconfig) {
-                    encuesta(file, numencuesta);
-                    Opciones(file, numopciones);
-                    Configuraciones(file, numconfig);
+                    encuesta(workbook, numencuesta);
+                    Opciones(workbook, numopciones);
+                    Configuraciones(workbook, numconfig);
                 } else {
                     System.out.println("Algo esta mal.");
                 }
@@ -239,35 +160,296 @@ public class LecturaExcel {
 
         return validacion;
     }
+    
+    
+//METODO QUE CREAN EL ARCHIVO DE CONFIG
+    public void Configuraciones(HSSFWorkbook workbook, int i) throws IOException {
 
-      boolean ordenar_opciones(ArrayList<String> Encabezado, ArrayList<String> aux_List) {
+        /*
+	
+	 * Obtenemos la primera pestaña a la que se quiera procesar indicando el indice.
+	
+	 * Una vez obtenida la hoja excel con las filas que se quieren leer obtenemos el iterator
+	
+	 * que nos permite recorrer cada una de las filas que contiene.
+	
+         */
+        HSSFSheet sheet = workbook.getSheetAt(i);
+        Iterator<Row> rowIterator = sheet.iterator();
+        int contadorFila = 0;
+        int contadorCol = 0;
+        Row row;
+        boolean error = false;
+        int conterror = 0;
+
+        // Recorremos todas las filas para mostrar el contenido de cada celda
+        while (rowIterator.hasNext()) {
+            row = rowIterator.next();
+
+            // Obtenemos el iterator que permite recorres todas las celdas de una fila
+            Iterator<Cell> cellIterator = row.cellIterator();
+            Cell celda;
+
+            while (cellIterator.hasNext()) {
+                celda = cellIterator.next();
+                if (contadorFila == 0) {
+                    Encabezado3.add(celda.getStringCellValue());
+                     contadorCol++;
+                } else {
+                    // Dependiendo del formato de la celda el valor se debe mostrar como String, Fecha, boolean, entero...
+                    switch (celda.getCellType()) {
+                        case Cell.CELL_TYPE_NUMERIC:
+                            System.out.println(celda.getStringCellValue());
+                           
+                            break;
+
+                        case Cell.CELL_TYPE_STRING:
+                            aux_list3.add(celda.getStringCellValue());
+                 
+                            break;
+                        case Cell.CELL_TYPE_BOOLEAN:
+                            if (celda.getBooleanCellValue() == true) {
+                                aux_list3.add("true");
+                            } else {
+                                aux_list3.add("false");
+                            }
+                       
+                            break;
+                        default:
+                            // System.out.println("false");
+                            aux_list3.add("Viene-Vacio");
+                     
+
+                    }
+
+                }
+
+            }
+            if (contadorFila > 0) {
+                
+                error = añadir_config(Encabezado3, aux_list3);
+                if (error == true) {
+                    conterror++;
+                }
+                aux_list3.clear();
+            }
+            contadorFila++;
+        }
+
+        // cerramos el libro excel	
+        workbook.close();
+
+        if (conterror == 0) {
+            archivo3.CrearFile(buffer3.toString(), "configuracion");
+        } else {
+            conterror = 0;
+            error = false;
+            System.out.println("ERROR");
+        }
+    }
+    
+    
+//METODO QUE AÑADE AL ARCHIVO DE CONFIG
+    boolean añadir_config(ArrayList<String> Encabezado, ArrayList<String> aux_List) {
+        buffer3.append("FILA{\n");
+        for (int i = 0; i < Encabezado.size(); i++) {
+            if (Encabezado.get(i).equalsIgnoreCase("titulo_formulario")) {
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    buffer3.append("titulo_formulario~#~" + aux_List.get(i) + "~#~\n");
+                }
+            } else if (Encabezado.get(i).equalsIgnoreCase("idform")) {
+
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    buffer3.append("idform~#~" + aux_List.get(i) + "~#~\n");
+                }
+            } else if (Encabezado.get(i).equalsIgnoreCase("estilo")) {
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    buffer3.append("estilo~#~" + aux_List.get(i) + "~#~\n");
+                }
+            } else if (Encabezado.get(i).equalsIgnoreCase("importar")) {
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    buffer3.append("importar~#~" + aux_List.get(i) + "~#~\n");
+                }
+            } else if (Encabezado.get(i).equalsIgnoreCase("codigo_principal")) {
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    buffer3.append("codigo_principal~#~" + aux_List.get(i) + "~#~\n");
+                }
+            } else if (Encabezado.get(i).equalsIgnoreCase("codigo_global")) {
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    buffer3.append("codigo_global~#~" + aux_List.get(i) + "~#~\n");
+                }
+            }
+
+        }
+
+        buffer3.append("} \n");
+        return false;
+    }
+    
+    
+    //METODO QUE CREAN EL ARCHIVO DE OPCIONES
+    public void Opciones(HSSFWorkbook workbook, int i) throws IOException {
+
+        /*
+	
+	 * Obtenemos la primera pestaña a la que se quiera procesar indicando el indice.
+	
+	 * Una vez obtenida la hoja excel con las filas que se quieren leer obtenemos el iterator
+	
+	 * que nos permite recorrer cada una de las filas que contiene.
+	
+         */
+        HSSFSheet sheet = workbook.getSheetAt(i);
+        Iterator<Row> rowIterator = sheet.iterator();
+        int contadorFila = 0;
+        int contadorCol = 0;
+        Row row;
+        boolean error = false;
+        int conterror = 0;
+
+        // Recorremos todas las filas para mostrar el contenido de cada celda
+        while (rowIterator.hasNext()) {
+            row = rowIterator.next();
+
+            // Obtenemos el iterator que permite recorres todas las celdas de una fila
+            Iterator<Cell> cellIterator = row.cellIterator();
+            Cell celda;
+         
+            while (cellIterator.hasNext()) {
+                
+                celda = cellIterator.next();
+                if (contadorFila == 0) {
+                    Encabezado2.add(celda.getStringCellValue());
+                    contadorCol++;
+                } else {
+                    // Dependiendo del formato de la celda el valor se debe mostrar como String, Fecha, boolean, entero...
+                    switch (celda.getCellType()) {
+                        case Cell.CELL_TYPE_NUMERIC:
+                            System.out.println(celda.getStringCellValue());
+                            
+                            break;
+
+                        case Cell.CELL_TYPE_STRING:
+                            aux_list2.add(celda.getStringCellValue());
+                         
+                            break;
+                        case Cell.CELL_TYPE_BOOLEAN:
+                            if (celda.getBooleanCellValue() == true) {
+                                aux_list2.add("true");
+                            } else {
+                                aux_list2.add("false");
+                            }
+                            
+                            break;
+                        default:
+                            // System.out.println("false");
+                            aux_list2.add("Viene-Vacio");
+                            
+
+                    }
+
+                }
+
+            }
+            if (contadorFila > 0) {
+           
+                if(Encabezado2.size()>aux_list2.size()){
+                aux_list2.add("");
+                }else if(Encabezado2.size()<aux_list2.size()){
+                Encabezado2.add("");
+                }  
+                
+                error = ordenar_opciones(Encabezado2, aux_list2);
+                if (error == true) {
+                    conterror++;
+                }
+                aux_list2.clear();
+            }
+            contadorFila++;
+        }
+
+        // cerramos el libro excel	
+        workbook.close();
+
+        if (conterror == 0) {
+            archivo2.CrearFile(buffer2.toString(), "opciones");
+        } else {
+            conterror = 0;
+            error = false;
+            System.out.println("ERROR");
+        }
+    }
+    
+    
+ //METODO QUE ORDENA EL ARCHIVO DE OPCIONES
+    boolean ordenar_opciones(ArrayList<String> Encabezado, ArrayList<String> aux_List) {
         ArrayList<String> auxEncabezado = new ArrayList<String>();
         ArrayList<String> auxOrdenado = new ArrayList<String>();
         for (int i = 0; i < Encabezado.size(); i++) {
-            if (Encabezado.get(i).equalsIgnoreCase("Tipo")) {
+            if (Encabezado.get(i).equalsIgnoreCase("nombre_lista")) {
                 auxEncabezado.add(Encabezado.get(i));
                 auxOrdenado.add(aux_List.get(i));
             }
         }
         for (int i = 0; i < Encabezado.size(); i++) {
-            if (!Encabezado.get(i).equalsIgnoreCase("Tipo")) {
+            if (!Encabezado.get(i).equalsIgnoreCase("nombre_lista")) {
                 auxEncabezado.add(Encabezado.get(i));
                 auxOrdenado.add(aux_List.get(i));
             }
         }
-        return añadir_encuesta(auxEncabezado, auxOrdenado);
+        return añadir_opciones(auxEncabezado, auxOrdenado);
     }
+    
+    
+//METODO QUE AÑADE AL ARCHIVO DE OPCIONES
+    boolean añadir_opciones(ArrayList<String> Encabezado, ArrayList<String> aux_List) {
 
+        for (int i = 0; i < Encabezado.size(); i++) {
+            if (Encabezado.get(i).equalsIgnoreCase("nombre_lista")) {
+
+                String cad = aux_List.get(i).toString();
+
+                buffer2.append(cad + "{\n");
+
+            } else if (Encabezado.get(i).equalsIgnoreCase("nombre")) {
+
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    buffer2.append("idpregunta~#~" + aux_List.get(i) + "~#~\n");
+                }
+            } else if (Encabezado.get(i).equalsIgnoreCase("etiqueta")) {
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    buffer2.append("etiqueta~#~" + aux_List.get(i) + "~#~\n");
+                }
+            } else if (Encabezado.get(i).equalsIgnoreCase("multimedia")) {
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                    String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer2.append("multimedia~#~" + aux + "~#~\n");
+                }
+                    }
+                    
+                
+                
+            }
+
+        }
+
+        buffer2.append("} \n");
+        estado = 0;
+        estadociclo--;
+        estadociclo--;
+
+        return false;
+    }
     
     
-    public void encuesta(FileInputStream file, int hoja) throws IOException {
+ //METODO QUE CREAN EL ARCHIVO DE ENCUESTA
+    public void encuesta(HSSFWorkbook workbook, int hoja) throws IOException {
         //Nodo padre, hijo;
         // Crear el objeto que tendra el libro de Excel
-        HSSFWorkbook workbook = new HSSFWorkbook(file);
+
         //padre = new Nodo(Constants.INICIO,0,0,Constants.INICIO);
         //root=padre;
-
-
         /*
 	
 	 * Obtenemos la primera pestaña a la que se quiera procesar indicando el indice.
@@ -301,7 +483,7 @@ public class LecturaExcel {
 
             Cell celda;
 
-            contadorCol = 0;
+
 
             while (cellIterator.hasNext()) {
                 //Nodo nieto;
@@ -315,8 +497,8 @@ public class LecturaExcel {
                     switch (celda.getCellType()) {
 
                         case Cell.CELL_TYPE_NUMERIC:
-
-                            System.out.println(celda.getStringCellValue());
+                           
+                            aux_list.add(celda.getStringCellValue());
                             contadorCol++;
                             break;
 
@@ -347,6 +529,18 @@ public class LecturaExcel {
 
             }
             if (contadorFila > 0) {
+                while(Encabezado.size()<aux_list.size()||Encabezado.size()>aux_list.size()){
+                if(Encabezado.size()>aux_list.size()){
+                aux_list.add("");
+                }else if(Encabezado.size()<aux_list.size()){
+                Encabezado.add("");
+                }
+                }
+               /* for(int j=0;j<Encabezado.size();j++){
+                System.out.println(Encabezado.get(j)+"<--->"+aux_list.get(j)+"\n");
+                }*/
+                
+                
                 error = ordenar_encuesta(Encabezado, aux_list);
                 if (error == true) {
                     conterror++;
@@ -360,15 +554,17 @@ public class LecturaExcel {
         workbook.close();
 
         if (conterror == 0) {
-            archivo.CrearFile(buffer.toString());
+            archivo.CrearFile(buffer.toString(), "encuesta");
         } else {
             conterror = 0;
             error = false;
             System.out.println("ERROR");
         }
     }
+    
+    
     public int estado = 0, estadociclo = 0;
-
+//METODO QUE ORDENA EL ARCHIVO DE ENCUESTA
     boolean ordenar_encuesta(ArrayList<String> Encabezado, ArrayList<String> aux_List) {
         ArrayList<String> auxEncabezado = new ArrayList<String>();
         ArrayList<String> auxOrdenado = new ArrayList<String>();
@@ -387,6 +583,8 @@ public class LecturaExcel {
         return añadir_encuesta(auxEncabezado, auxOrdenado);
     }
 
+    
+    //METODO QUE AÑADE AL ARCHIVO DE ENCUESTA
     boolean añadir_encuesta(ArrayList<String> Encabezado, ArrayList<String> aux_List) {
 
         for (int i = 0; i < Encabezado.size(); i++) {
@@ -452,73 +650,114 @@ public class LecturaExcel {
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("parametro")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("parametro~#~" + aux_List.get(i) + "~#~\n");
+                            String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("parametro~#~" + aux + "~#~\n");
+                    }
+
                 }
-            } else if (Encabezado.get(i).equalsIgnoreCase("calcular")) {
+            } else if (Encabezado.get(i).equalsIgnoreCase("calculo")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("calcular~#~" + aux_List.get(i) + "~#~\n");
+                             String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("calculo~#~" + aux + "~#~\n");
+                    }
+                    
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("aplicable")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("aplicable~#~" + aux_List.get(i) + "~#~\n");
+                            String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("aplicable~#~" + aux + "~#~\n");
+                    }
                 }
-            } else if (Encabezado.get(i).equalsIgnoreCase("sugerencia")) {
+            } else if (Encabezado.get(i).equalsIgnoreCase("sugerir")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("sugerencia~#~" + aux_List.get(i) + "~#~\n");
+                             String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("sugerir~#~" + aux + "~#~\n");
+                    }
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("restringir")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("restringir~#~" + aux_List.get(i) + "~#~\n");
+                             String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("restringir~#~" + aux + "~#~\n");
+                    }
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("restringirmsn")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("restringirmsn~#~" + aux_List.get(i) + "~#~\n");
+         String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("restringirmsn~#~" + aux + "~#~\n");
+                    }
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("requerido")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("requerido~#~" + aux_List.get(i) + "~#~\n");
+         String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("requerido~#~" + aux + "~#~\n");
+                    }
                 }
-            } else if (Encabezado.get(i).equalsIgnoreCase("pordefecto")) {
+            } 
+            else if (Encabezado.get(i).equalsIgnoreCase("requeridomsn")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("pordefecto~#~" + aux_List.get(i) + "~#~\n");
+         String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("requeridomsn~#~" + aux + "~#~\n");
+                    }
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("lectura")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("lectura~#~" + aux_List.get(i) + "~#~\n");
+                             String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("lectura~#~" + aux + "~#~\n");
+                    }
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("repeticion")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("repeticion~#~" + aux_List.get(i) + "~#~\n");
+         String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("repeticion~#~" + aux + "~#~\n");
+                    }
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("apariencia")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("apariencia~#~" + aux_List.get(i) + "~#~\n");
+                             String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("apariencia~#~" + aux + "~#~\n");
+                    }
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("codigo_pre")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("codigo_pre~#~" + aux_List.get(i) + "~#~\n");
+                             String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("codigo_pre~#~" + aux + "~#~\n");
+                    }
                 }
-            } else if (Encabezado.get(i).equalsIgnoreCase("codigo_post")) {
+            }else if (Encabezado.get(i).equalsIgnoreCase("codigo_post")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("codigo_post~#~" + aux_List.get(i) + "~#~\n");
+                             String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("codigo_post~#~" + aux + "~#~\n");
+                    }
+                }
+            } 
+            else if (Encabezado.get(i).equalsIgnoreCase("predeterminado")) {
+                if (!aux_List.get(i).equals("Viene-Vacio")) {
+                             String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("predeterminado~#~" + aux + "~#~\n");
+                    }
                 }
             } else if (Encabezado.get(i).equalsIgnoreCase("multimedia")) {
                 if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("multimedia~#~" + aux_List.get(i) + "~#~\n");
+                          String aux=aux_List.get(i);
+                    if(!aux.equals("")){
+                    buffer.append("multimedia~#~" + aux + "~#~\n");
+                    }
                 }
-            } else if (Encabezado.get(i).equalsIgnoreCase("decimal")) {
-                if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("decimal~#~" + aux_List.get(i) + "~#~\n");
-                }
-            } else if (Encabezado.get(i).equalsIgnoreCase("hora")) {
-                if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("hora~#~" + aux_List.get(i) + "~#~\n");
-                }
-            } else if (Encabezado.get(i).equalsIgnoreCase("fechahora")) {
-                if (!aux_List.get(i).equals("Viene-Vacio")) {
-                    buffer.append("fechahora~#~" + aux_List.get(i) + "~#~\n");
-                }
-            }
+            } 
 
         }
 

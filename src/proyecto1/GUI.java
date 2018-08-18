@@ -50,7 +50,6 @@ public class GUI extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -67,9 +66,6 @@ public class GUI extends javax.swing.JFrame {
         jTabbedPane4.addTab("tab1", jScrollPane3);
 
         jMenu1.setText("File");
-
-        jMenuItem5.setText("Abrir");
-        jMenu1.add(jMenuItem5);
 
         jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem3.setText("Generar");
@@ -144,7 +140,11 @@ fc.setFileFilter(filtroxls);
           Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
       }
       FileManager milenguaje=new FileManager();
-      String missentencias=milenguaje.readFile(System.getProperty("user.home") + File.separator +"SalidasDot"+File.separator+"entrada.txt");
+      String missentencias=milenguaje.readFile(System.getProperty("user.home") + File.separator +"SalidasDot"+File.separator+"encuesta.txt");
+      FileManager milenguaje2=new FileManager();
+      String missentencias2=milenguaje2.readFile(System.getProperty("user.home") + File.separator +"SalidasDot"+File.separator+"opciones.txt");
+       FileManager milenguaje3=new FileManager();
+      String missentencias3=milenguaje3.readFile(System.getProperty("user.home") + File.separator +"SalidasDot"+File.separator+"configuracion.txt");
       
        InputStream txtanalizar = new ByteArrayInputStream(missentencias.getBytes());
       Analyzer analyzer = new Analyzer(txtanalizar);
@@ -209,7 +209,6 @@ fc.setFileFilter(filtroxls);
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTextArea jTextArea1;

@@ -39,6 +39,29 @@ public class Graficador
         this.autoAbrir(ruta_png);        
     }
         
+      public void graficarAST2(Nodo raiz)
+    {
+        //Creo una carpeta en /home/usuario/SalidasDot, en donde va estar todo
+        File folder = new File(System.getProperty("user.home") + File.separator +"SalidasDot");        
+        if(!folder.exists())
+            folder.mkdirs();
+        
+        
+        //Rutas para el .dot y la imagen .png
+        String ruta_dot = System.getProperty("user.home") + File.separator +"SalidasDot"+File.separator+"ast2.dot"; 
+        String ruta_png = System.getProperty("user.home") + File.separator +"SalidasDot"+File.separator+"ast2.png"; 
+        
+        //Arma el contenido del .dot
+        this.armar_Cuerpo_dot(raiz, ruta_dot);        
+        
+        //Genera el archivo .dot y su imagen .png
+        this.crearGrafo(ruta_dot, ruta_png);
+        
+        //Abre la imagen resultante .png
+        this.autoAbrir(ruta_png);        
+    }
+      
+    
     //Este metodo se puede usar para graficar cualquier grafo
     //debido a q solo necesita al ruta del dot y la ruta de la salida->imagen
     private void crearGrafo(String ruta_dot, String ruta_png)

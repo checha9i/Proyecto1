@@ -10,7 +10,10 @@ package proyecto1.XLSaXForm;
  * @author Javier Solares
  */
 public class Constants {
+    
      public static final String INICIO = "INICIO";
+     
+     //TIPOS DE COLUMNA
      public static final String TIPO = "TIPO";
      public static final String IDPREGUNTA = "IDPREGUNTA" ;
      public static final String ETIQUETA = "ETIQUETA";
@@ -26,9 +29,18 @@ public class Constants {
      public static final String APARIENCIA = "APARIENCIA";
      public static final String CODIGO_PRE = "CODIGO_PRE";
      public static final String CODIGO_POST = "CODIGO_POST";
+     public static final String MULTIMEDIA = "MULTIMEDIA";
+     
+     
+     //TIPOS DE PREGUNTA
      public static final String INICIARAGRUPACION = "INICIAR AGRUPACION";
      public static final String TEXTO ="TEXTO";
      public static final String FECHA = "FECHA";
+     public static final String FECHAHORA = "FECHAHORA";
+     public static final String HORA = "HORA";
+     public static final String DECIMAL = "DECIMAL";
+     public static final String CONDICIONAL = "CONDICIONAL";
+     
      public static final String NOTA = "NOTA";
      public static final String FINALIZARAGRUPACION = "FINALIZAR AGRUPACION";
      public static final String INICIARCICLO = "INICIAR APLICACION";
@@ -36,6 +48,7 @@ public class Constants {
      public static final String ENTERO = "ENTERO";
      public static final String RANGO = "RANGO";
      public static final String SELECCIONA_UNO = "SELECCIONA_UNO";
+     public static final String SELECCIONA_MULTIPLES = "SELECCIONA_MULTIPLES";
      
 
 }

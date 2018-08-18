@@ -26,17 +26,28 @@ TOKEN: {
   |<NOTA:"NOTA">
   |<ENTERO:"ENTERO">
   |<RANGO:"RANGO">
+ |<DECIMAL:"DECIMAL">
+|<HORA:"HORA">
+|<FECHAHORA:"FECHAHORA">
+|<CONDICIONAL:"CONDICIONAL">
+|<SELECCIONA_MULTIPLES:"SELECCIONA_MULTIPLES">
+ 
+ 
+ 
+ 
+ 
+ 
   |<SELECCIONA_UNO:"selecciona_uno">
 
 
   |<ID_PREGUNTA:"IDPREGUNTA">
   |<ETIQUETA:"ETIQUETA">
   |<PARAMETRO:"PARAMETRO">
-  |<CALCULAR:"CALCULAR">
+  |<CALCULAR:"CALCULO">
   |<APLICABLE:"APLICABLE">
-    |<SUGERENCIA:"SUGERENCIA">
+    |<SUGERENCIA:"SUGERIR">
      |<REQUERIDO:"REQUERIDO">
-     |<PORDEFECTO:"PORDEFECTO">
+     |<PORDEFECTO:"PREDETERMINADO">
      |<REQUERIDOMSN:"REQUERIDOMSN">
      |<CODIGO_POST:"CODIGO_POST">
      |<CODIGO_PRE:"CODIGO_PRE">
@@ -148,7 +159,21 @@ Token t;}
 <LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
     | <RANGO>{padre=new Nodo(Constants.RANGO,0,0,"RANGO");}
 <LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
+    | <HORA>{padre=new Nodo(Constants.HORA,0,0,"HORA");}
+<LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
+    | <FECHAHORA>{padre=new Nodo(Constants.FECHAHORA,0,0,"FECHAHORA");}
+<LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
+    | <DECIMAL>{padre=new Nodo(Constants.DECIMAL,0,0,"DECIMAL");}
+<LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
+ | <CONDICIONAL>{padre=new Nodo(Constants.CONDICIONAL,0,0,"CONDICIONAL");}
+<LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
+ | <MULTIMEDIA>{padre=new Nodo(Constants.MULTIMEDIA,0,0,"MULTIMEDIA");}
+<LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
+
     | <SELECCIONA_UNO> t=<NOMBRE>{padre=new Nodo(Constants.SELECCIONA_UNO,0,0,"SELECCIONA_UNO");}//{padre=new Nodo(Constants.SELECCIONA_UNO,0,0,"SELECCIONA_UNO");
+ {hijo2=new Nodo("valor", t.beginLine, t.beginColumn,t.image); padre.hijos.add(hijo2);}
+<LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
+ | <SELECCIONA_MULTIPLES> t=<NOMBRE>{padre=new Nodo(Constants.SELECCIONA_MULTIPLES,0,0,"SELECCIONA_MULTIPLES");}//{padre=new Nodo(Constants.SELECCIONA_UNO,0,0,"SELECCIONA_UNO");
  {hijo2=new Nodo("valor", t.beginLine, t.beginColumn,t.image); padre.hijos.add(hijo2);}
 <LlaveL>hijo=MUCHOS_CONTENIDOSP(){padre.hijos.add(hijo);} <LlaveR>{ return padre;}
 }

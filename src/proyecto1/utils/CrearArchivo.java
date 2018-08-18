@@ -19,7 +19,7 @@ import proyecto1.XLSaXForm.Compilador;
  */
 public class CrearArchivo {
     
-   public void CrearFile(String entrada) {
+   public void CrearFile(String entrada,String nombre) {
 
         System.out.print("Archivo de Excel Correcto\n");
         //Creo una carpeta en /home/usuario/SalidasDot, en donde va estar todo
@@ -30,7 +30,7 @@ public class CrearArchivo {
         }
 
         //Rutas para el .dot y la imagen .png
-        String ruta_entrada = System.getProperty("user.home") + File.separator + "SalidasDot" + File.separator + "entrada.txt";
+        String ruta_entrada = System.getProperty("user.home") + File.separator + "SalidasDot" + File.separator + nombre+".txt";
 
         creararchivo(ruta_entrada, entrada.toString());
 
