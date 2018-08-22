@@ -15,10 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import proyecto1.XLSaXForm.Graficador;
-import proyecto1.XLSaXForm.LecturaExcel;
-import proyecto1.XLSaXForm.Analizador.Analyzer;
-import proyecto1.XLSaXForm.Analizador.ParseException;
+import proyecto1.Encuesta.Graficador;
+import proyecto1.Encuesta.Analizador.Analyzer;
+import proyecto1.Encuesta.Analizador.ParseException;
 import proyecto1.utils.FileManager;
 
 /**

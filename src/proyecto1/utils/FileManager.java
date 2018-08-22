@@ -82,7 +82,7 @@ public class FileManager {
             String sCurrentLine;
 
             while ((sCurrentLine = br.readLine()) != null) {
-                fileText += sCurrentLine;
+                fileText += sCurrentLine+"\n";
             } // while
         } catch (Exception e) {
         } // catch

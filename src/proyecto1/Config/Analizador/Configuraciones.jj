@@ -1,0 +1,149 @@
+
+/*
+ * Copyright © 2002 Sun Microsystems, Inc., 4150 Network Circle, Santa Clara,
+ * California 95054, U.S.A. All rights reserved.  Sun Microsystems, Inc. has
+ * intellectual property rights relating to technology embodied in the product
+ * that is described in this document. In particular, and without limitation,
+ * these intellectual property rights may include one or more of the U.S.
+ * patents listed at http://www.sun.com/patents and one or more additional
+ * patents or pending patent applications in the U.S. and in other countries.
+ * U.S. Government Rights - Commercial software. Government users are subject
+ * to the Sun Microsystems, Inc. standard license agreement and applicable
+ * provisions of the FAR and its supplements.  Use is subject to license terms.
+ * Sun,  Sun Microsystems,  the Sun logo and  Java are trademarks or registered
+ * trademarks of Sun Microsystems, Inc. in the U.S. and other countries.  This
+ * product is covered and controlled by U.S. Export Control laws and may be
+ * subject to the export or import laws in other countries.  Nuclear, missile,
+ * chemical biological weapons or nuclear maritime end uses or end users,
+ * whether direct or indirect, are strictly prohibited.  Export or reexport
+ * to countries subject to U.S. embargo or to entities identified on U.S.
+ * export exclusion lists, including, but not limited to, the denied persons
+ * and specially designated nationals lists is strictly prohibited.
+ */
+
+
+options {
+  LOOKAHEAD = 2;
+  STATIC = false;
+  IGNORE_CASE = true;
+  FORCE_LA_CHECK = true;
+}
+
+PARSER_BEGIN(Configuraciones)
+package proyecto1.Config.Analizador;
+  import proyecto1.Config.Nodo;
+  import proyecto1.Config.Constants;
+  public class Configuraciones {
+  public Nodo root;
+}
+PARSER_END(Configuraciones)
+
+SKIP:
+{
+"\r"
+| "\t"
+|"\n"
+|" "}
+
+SPECIAL_TOKEN :
+{
+  <DELIM : "`">
+}
+
+TOKEN :
+{
+< TituloForm : "titulo_formulario"> : AceptarCualquier
+|< IdForm : "idform"> : AceptarCualquier
+|< Estilo : "estilo"> : AceptarCualquier
+|< Importar : "importar"> : AceptarCualquier
+|< CodigoPrincipal : "codigo_principal"> : AceptarCualquier
+|< CodigoGlobal : "codigo_global"> : AceptarCualquier
+|< Fila : "Fila">
+|<LlaveL:"{">
+|<LlaveR:"}">
+}
+
+
+<AceptarCualquier> MORE :
+{
+    <(~["~"])+> 
+}
+
+<AceptarCualquier> TOKEN :
+{ 
+    <Cadena : "~"> : DEFAULT 
+}
+
+
+
+void INICIO():
+{
+  Nodo padre, hijo;
+Token t;
+}
+{
+  { padre = new Nodo(Constants.INICIO,0,0,"INICIO"); } 
+hijo = INSTRUCCIONES() { padre.hijos.add(hijo);} {root = padre; }
+}
+
+Nodo INSTRUCCIONES():
+{
+  Nodo padre,hijo,hijo2;
+}
+{
+  { padre = new Nodo("INSTRUCCIONES",0,0,"INSTRUCCIONES"); }
+   hijo = ROW() { padre.hijos.add(hijo); } INSTRUCCIONES2(padre)
+  { return padre; }
+}
+
+Nodo INSTRUCCIONES2(Nodo padre):
+{
+  Nodo hijo,hijo2;
+}
+{
+
+   hijo = ROW() { padre.hijos.add(hijo); } INSTRUCCIONES2(padre)
+  { return padre; }
+  |{ return padre;}
+}
+
+Nodo ROW():{
+Nodo padre,hijo;}{
+<Fila>{padre=new Nodo("padre",0,0,"Fila");} <LlaveL> hijo=ContenidoRow(){padre.hijos.add(hijo);} <LlaveR>{return padre;}
+}
+
+Nodo ContenidoRow():{
+Nodo padre,hijo;
+String t;}{{padre=new Nodo("padre",0,0,"Tipo");}
+hijo=Tipo(){padre.hijos.add(hijo);} t=Valor(){hijo.hijos.add(new Nodo("padre",0,0,t));} ContenidoRow2(padre)
+{ return padre; }
+}
+
+Nodo ContenidoRow2(Nodo padre):{
+Nodo hijo;
+String t;}{
+hijo=Tipo(){padre.hijos.add(hijo);} t=Valor(){hijo.hijos.add(new Nodo("padre",0,0,t));} ContenidoRow2(padre)
+{ return padre; }
+
+
+|{return padre;}
+}
+
+
+Nodo Tipo():{
+}{
+<TituloForm>{return new Nodo("padre",0,0,"Titulo_Form");}
+    |<IdForm>{return new Nodo("padre",0,0,"Id_Form");}
+    |<Estilo>{return new Nodo("padre",0,0,"Estilo");}
+    |<Importar>{return new Nodo("padre",0,0,"Importar");}
+    |<CodigoPrincipal>{return new Nodo("padre",0,0,"Codigo_Principal");}
+    |<CodigoGlobal>{return new Nodo("padre",0,0,"Codigo_Global");}
+}
+
+String Valor() :
+{Token t;
+String t2;
+}
+{
+  t = <Cadena> { t2 = t.image; t2 = t2.substring(0, t2.length() - 1);   return t2.replace("`", "");}
+}

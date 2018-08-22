@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import proyecto1.XLSaXForm.Compilador;
+import proyecto1.Encuesta.Compilador;
 
 /**
  *
